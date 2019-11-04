@@ -75,7 +75,16 @@ func SendEmailByQueue() {
 		wg.Add(1)
 		go func() {
 			m := CreateMsg(data.From, data.To, data.Subject, data.Body)
-			models.Gmd.DialAndSend(m)
+			err := models.Gmd.DialAndSend(m)
+			// 发送失败 重新加入队列 也可以同时记录到日志
+			if err != nil {
+				AddSendQueue(EmailQueue{
+					From:    data.From,
+					To:      data.To,
+					Subject: data.Subject,
+					Body:    data.Body,
+				})
+			}
 			defer wg.Done()
 		}()
 	}

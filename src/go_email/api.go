@@ -13,24 +13,9 @@ func PostEmail(c *gin.Context)  {
 	mailFrom 	:= c.PostForm("mail_from")
 	mailTo 		:= c.PostForm("mail_to")
 
-	//file, header, e1 := c.Request.FormFile("file")
-	//if e1 != nil {
-	//	util.JsonRespond(500, "附件上传失败", "", c)
-	//}
-	//
-	//content, e2 := ioutil.ReadAll(file)
-	//if e2 != nil {
-	//	util.JsonRespond(500, "文件读取失败", "", c)
-	//}
-	//
-	//fmt.Println(header.Filename)
-	//fmt.Println(string(content))
-
-
 	for _, item :=  range strings.Split(mailTo,",") {
 		to = append(to, item)
 	}
-
 
 	subject := c.PostForm("subject")
 	content := c.PostForm("content")
@@ -40,6 +25,7 @@ func PostEmail(c *gin.Context)  {
 
 	if err != nil {
 		util.JsonRespond(500, "邮件发送失败", "", c)
+		return
 	}
 
 	util.JsonRespond(200, "邮件发送成功", "", c)

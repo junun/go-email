@@ -4,7 +4,6 @@ import (
 	"github.com/go-redis/redis"
 	"go_email/src/pkg/setting"
 	"log"
-	"time"
 )
 
 var (
@@ -30,16 +29,6 @@ func ConnectRedis(addr string, passwd string, db int){
 		Password	: passwd,
 		DB       	: db,
 	});
-}
-
-func GetValByKey(key string) interface{}{
-	return  Rdb.Get(key).Val()
-}
-
-func SetValByKey(key string, val interface{}, expiration time.Duration) error{
-	_, err :=Rdb.Set(key, val, expiration).Result()
-
-	return  err
 }
 
 func PutinQueue(queue_url string, url string){
